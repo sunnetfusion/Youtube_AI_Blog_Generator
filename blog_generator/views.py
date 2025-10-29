@@ -9,6 +9,13 @@ import json, os, traceback
 from pathlib import Path
 import assemblyai as aai
 from .models import BlogPost
+from django.http import HttpResponse
+
+
+
+
+def health_check(request):
+    return HttpResponse("OK", status=200)
 
 
 # ---------- MAIN PAGE ----------
