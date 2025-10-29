@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ blog_article_detail.youtube_title }}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+
+<body class="bg-[#0b0c14] text-gray-100 font-sans antialiased">
+
+  <!-- Navbar -->
+  <nav class="bg-[#111222] p-4 text-white flex justify-between items-center shadow-md shadow-purple-700/30">
+    <h1 class="text-2xl font-bold tracking-wide">AI BLOG GENERATOR</h1>
+    <div class="space-x-4">
+      <a href="{% url 'index' %}" class="hover:text-purple-400 transition text-sm font-medium">Welcome {{ user.username }}</a>
+      <a href="{% url 'blog-list' %}" class="hover:text-purple-400 transition text-sm font-medium">All Blogs</a>
+      <a href="{% url 'logout' %}" class="hover:text-purple-400 transition text-sm font-medium">Logout</a>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container mx-auto mt-12 px-4 sm:px-0">
+    <div class="max-w-4xl mx-auto bg-[#1b1c25] rounded-2xl shadow-xl shadow-purple-700/20 p-8 border border-purple-700/20">
+
+      <section>
+        <h2 class="text-3xl font-semibold text-purple-400 mb-6 text-center">{{ blog_article_detail.youtube_title }}</h2>
+
+        <div class="bg-[#12131a] border border-purple-700/30 p-6 rounded-xl shadow-md shadow-purple-800/20">
+          
+          <!-- Blog Content -->
+          <div id="blogContent" class="text-gray-300 leading-relaxed mb-6 prose prose-invert prose-purple max-w-none">
+            {{ blog_article_detail.generated_content|safe }}
+          </div>
+
+          <hr class="my-6 border-purple-700/20">
+
+          <!-- Metadata -->
+          <div class="space-y-4">
+            <div>
+              <h4 class="text-lg font-semibold text-purple-400 mb-1">YouTube Video</h4>
+              <p class="text-gray-300 mb-2">{{ blog_article_detail.youtube_title }}</p>
+            </div>
+
+            <div>
+              <h4 class="text-lg font-semibold text-purple-400 mb-1">Source Link</h4>
+              <a href="{{ blog_article_detail.youtube_link }}" target="_blank" class="text-purple-400 hover:text-purple-300 underline break-all">
+                {{ blog_article_detail.youtube_link }}
+              </a>
+            </div>
+
+            <div>
+              <h4 class="text-lg font-semibold text-purple-400 mb-1">Created</h4>
+              <p class="text-gray-400">{{ blog_article_detail.created_at|date:"F d, Y - g:i A" }}</p>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="mt-6 flex gap-4">
+            <a href="{% url 'blog-list' %}" class="bg-purple-700 hover:bg-purple-800 text-white px-6 py-2 rounded-lg font-medium shadow-lg shadow-purple-700/40 transition">
+              Back to All Blogs
+            </a>
+            <a href="{% url 'index' %}" class="bg-gray-700 hover:bg-gray-800 text-white px-6 py-2 rounded-lg font-medium transition">
+              Create New Blog
+            </a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="text-center p-4 text-gray-500 text-sm mt-10">
+    Powered by <span class="text-purple-400">Sunnet Fusion</span>
+  </footer>
+
+  <script>
+    // Convert markdown to HTML if marked.js is available
+    const content = document.getElementById('blogContent');
+    if (typeof marked !== 'undefined' && content) {
+      const rawContent = content.textContent;
+      content.innerHTML = marked.parse(rawContent);
+    }
+  </script>
+
+  <style>
+    /* Better spacing for blog content */
+    #blogContent {
+      line-height: 1.8;
+    }
+
+    #blogContent h1 {
+      font-size: 2em;
+      font-weight: 700;
+      color: #c084fc;
+      margin-block-start: 1.5em;
+      margin-block-end: 0.75em;
+    }
+
+    #blogContent h2 {
+      font-size: 1.5em;
+      font-weight: 600;
+      color: #c084fc;
+      margin-block-start: 1.5em;
+      margin-block-end: 0.75em;
+      padding-block-end: 0.3em;
+      border-block-end: 1px solid rgba(192, 132, 252, 0.2);
+    }
+
+    #blogContent h3 {
+      font-size: 1.25em;
+      font-weight: 600;
+      color: #e9d5ff;
+      margin-block-start: 1.25em;
+      margin-block-end: 0.5em;
+    }
+
+    #blogContent p {
+      margin-block-end: 1.25em;
+      color: #d1d5db;
+      line-height: 1.75;
+    }
+
+    #blogContent ul, #blogContent ol {
+      margin-inline-start: 2em;
+      margin-block-end: 1.25em;
+      color: #d1d5db;
+    }
+
+    #blogContent li {
+      margin-block-end: 0.75em;
+      line-height: 1.6;
+    }
+
+    #blogContent strong {
+      color: #e9d5ff;
+      font-weight: 600;
+    }
+
+    #blogContent em {
+      color: #c084fc;
+      font-style: italic;
+    }
+
+    #blogContent code {
+      background-color: #1e1b4b;
+      padding: 0.2em 0.4em;
+      border-radius: 0.25em;
+      font-family: monospace;
+      font-size: 0.9em;
+    }
+
+    #blogContent blockquote {
+      border-inline-start: 4px solid #c084fc;
+      padding-inline-start: 1em;
+      margin-inline-start: 0;
+      margin-block-end: 1.25em;
+      color: #9ca3af;
+      font-style: italic;
+    }
+  </style>
+
+</body>
+</html>

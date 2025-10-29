@@ -1,0 +1,143 @@
+# Python
+*.py[cod]
+__pycache__/
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+*.whl
+
+# Virtual Environments
+venv/
+env/
+ENV/
+.venv
+.env.local
+virtualenv/
+
+# Django
+*.log
+db.sqlite3
+db.sqlite3-journal
+/media/
+/staticfiles/
+/static/
+*.pot
+*.pyc
+local_settings.py
+
+# Environment Variables (CRITICAL - Never push these!)
+.env
+.env.local
+.env.*.local
+*.env
+
+# Database
+*.sqlite
+*.sqlite3
+*.db
+
+# IDE & Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.sublime-project
+*.sublime-workspace
+.project
+.pydevproject
+.settings/
+
+# OS Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Node modules (if using frontend tools)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# FFmpeg & Large Files
+ffmpeg*
+*.tar.gz
+*.tar.xz
+*.zip
+*.rar
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*~.nib
+*.orig
+
+# Test coverage
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Certificates & Keys
+*.pem
+*.key
+*.crt
+*.cer
+*.p12
+*.pfx
+
+# Audio/Video files (from YouTube downloads)
+*.mp3
+*.mp4
+*.wav
+*.avi
+*.mkv
+*.webm
+*.m4a
+*.opus
+
+# Migrations (Uncomment if you don't want to track migrations)
+# */migrations/*.py
+# !*/migrations/__init__.py
+
+# Backup files
+*.bak
+*.backup
+*-backup/
+
+# Documentation builds
+docs/_build/
+site/
+
+# Mac specific
+.AppleDouble
+.LSOverride
+
+# Windows specific
+$RECYCLE.BIN/
+
+# Redis
+dump.rdb
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# Collected static files
+/collected_static/

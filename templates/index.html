@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Blog Generator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+
+<body class="bg-[#0b0c14] text-gray-100 min-h-screen flex flex-col">
+  <!-- Navbar -->
+  <nav class="bg-[#111222] p-4 text-white flex justify-between items-center shadow-md shadow-purple-700/30">
+    <h1 class="text-2xl font-bold">AI BLOG GENERATOR</h1>
+    <div>
+      <a href="{% url 'index' %}" class="hover:text-purple-400 transition text-sm font-medium">Welcome {{ user.username }}</a>
+      <a href="{% url 'blog-list' %}" class="hover:text-purple-400 transition text-sm font-medium">All Blogs</a>
+      <a href="{% url 'logout' %}" class="hover:text-purple-400 transition text-sm font-medium">Logout</a>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="flex-grow container mx-auto mt-10 max-w-3xl px-4">
+    <section class="bg-[#1b1c25] p-8 rounded-2xl shadow-lg shadow-purple-700/20 border border-purple-700/20">
+      <h2 class="text-3xl font-semibold text-purple-400 text-center mb-4">Generate Blog from YouTube</h2>
+
+      <form id="blogForm" class="mb-8">
+        {% csrf_token %}
+        <input id="youtubeLink" type="text" placeholder="Paste YouTube video link..."
+          class="w-full p-3 rounded-lg bg-[#12131a] border border-purple-600/40 text-gray-200 placeholder-gray-500 focus:ring-2 focus:ring-purple-600 focus:outline-none" />
+        <button id="generateBlogButton" type="submit"
+          class="mt-4 bg-purple-700 hover:bg-purple-800 text-white px-6 py-3 rounded-lg w-full font-medium shadow-lg transition">
+          Generate Blog
+        </button>
+      </form>
+
+      <!-- Loading Spinner -->
+      <div id="loading" class="hidden text-center">
+        <div class="animate-spin h-10 w-10 border-4 border-purple-500 border-t-transparent rounded-full mx-auto mb-3"></div>
+        <p class="text-gray-300">Processing your video, please wait...</p>
+      </div>
+
+      <!-- Error Message -->
+      <div id="errorMessage" class="hidden bg-red-900/30 border border-red-500/50 text-red-300 p-3 rounded-md mt-4"></div>
+
+      <!-- Output -->
+      <div id="blogContent" class="mt-8"></div>
+    </section>
+  </main>
+
+  <footer class="text-center text-gray-500 p-4 text-sm">
+    Powered by <span class="text-purple-400">Sunnet Fusion</span>
+  </footer>
+
+  <script>
+    document.getElementById("blogForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const link = document.getElementById("youtubeLink").value.trim();
+      const loading = document.getElementById("loading");
+      const blogContent = document.getElementById("blogContent");
+      const errorMessage = document.getElementById("errorMessage");
+      const btn = document.getElementById("generateBlogButton");
+
+      if (!link) return showError("Please paste a YouTube link.");
+
+      blogContent.innerHTML = "";
+      errorMessage.classList.add("hidden");
+      loading.classList.remove("hidden");
+      btn.disabled = true;
+
+      try {
+        const res = await fetch("/generate-blog/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCookie("csrftoken"),
+          },
+          body: JSON.stringify({ link }),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok || data.error) {
+          const detail = data.detail ? `<br>${data.detail}` : "";
+          showError(`${data.error}${detail}`);
+        } else {
+          blogContent.innerHTML = `
+            <h3 class="text-2xl text-purple-400 font-semibold mb-4">🎙️ Transcription</h3>
+            <div class="p-4 bg-[#12131a] rounded-lg text-gray-300 text-sm whitespace-pre-wrap mb-8 border border-purple-700/20">
+              ${data.transcript || "No transcript available"}
+            </div>
+
+            <h3 class="text-2xl text-purple-400 font-semibold mb-4">📝 Generated Blog</h3>
+            <div class="blog-output">${marked.parse(data.content)}</div>
+          `;
+        }
+      } catch (err) {
+        showError("Network error. Please try again.");
+        console.error(err);
+      } finally {
+        loading.classList.add("hidden");
+        btn.disabled = false;
+      }
+    });
+
+    function showError(msg) {
+      const errorBox = document.getElementById("errorMessage");
+      errorBox.innerHTML = msg;
+      errorBox.classList.remove("hidden");
+    }
+
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== "") {
+        const cookies = document.cookie.split(";");
+        for (let cookie of cookies) {
+          cookie = cookie.trim();
+          if (cookie.startsWith(name + "=")) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+  </script>
+</body>
+</html>

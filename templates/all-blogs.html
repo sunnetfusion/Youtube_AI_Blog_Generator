@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Blog Posts</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-[#0b0c14] text-gray-100 font-sans antialiased">
+
+  <!-- Navbar -->
+  <nav class="bg-[#111222] p-4 flex justify-between items-center shadow-md shadow-purple-700/30">
+    <h1 class="text-2xl font-bold text-white tracking-wide">AI BLOG GENERATOR</h1>
+    <div class="space-x-4">
+      <a href="{% url 'index' %}" class="hover:text-purple-400 transition text-sm font-medium">Welcome {{ user.username }}</a>
+      <a href="{% url 'blog-list' %}" class="hover:text-purple-400 transition text-sm font-medium">All Blogs</a>
+      <a href="{% url 'logout' %}" class="hover:text-purple-400 transition text-sm font-medium">Logout</a>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container mx-auto mt-12 px-4 sm:px-0">
+    <div class="max-w-3xl mx-auto bg-[#1b1c25] rounded-2xl shadow-xl shadow-purple-700/20 p-6 border border-purple-700/20">
+
+      <!-- Blog Posts -->
+      <section>
+        <h2 class="text-2xl font-semibold mb-6 text-purple-400 text-center">All Blog Posts</h2>
+        
+        {% if blog_articles %}
+          <div class="space-y-6">
+            {% for article in blog_articles %}
+            <a href="{% url 'blog-details' pk=article.id %}">
+              <div class="bg-[#12131a] border border-purple-700/30 rounded-xl p-5 shadow-md shadow-purple-800/20 hover:shadow-purple-600/40 transition">
+                <h3 class="text-xl font-semibold text-white mb-2">{{ article.youtube_title }}</h3>
+                <p class="text-gray-400 mb-3">{{ article.generated_content|truncatechars:100 }}</p>
+                <p class="text-xs text-gray-500">{{ article.created_at|date:"M d, Y - g:i A" }}</p>
+              </div>
+            </a>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="text-center py-12">
+            <p class="text-gray-400 text-lg mb-4">No blog posts yet.</p>
+            <a href="{% url 'index' %}" class="bg-purple-700 hover:bg-purple-800 text-white px-6 py-3 rounded-lg inline-block font-medium shadow-lg shadow-purple-700/40 transition">
+              Create Your First Blog
+            </a>
+          </div>
+        {% endif %}
+      </section>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="text-center p-4 text-gray-500 text-sm mt-10">
+    Powered by <span class="text-purple-400">Sunnet Fusion</span>
+  </footer>
+
+</body>
+</html>
