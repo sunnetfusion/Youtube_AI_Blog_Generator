@@ -26,5 +26,5 @@ tqdm==4.67.1
 typing-inspection==0.4.2
 typing_extensions==4.15.0
 websockets==15.0.1
+whitenoise==6.11.0
 yt-dlp==2025.10.22
-gunicorn==21.2.0
