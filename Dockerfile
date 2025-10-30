@@ -1,11 +1,13 @@
 FROM python:3.13-slim
 
-# Install FFmpeg and dependencies
+# Install FFmpeg, PostgreSQL libs, and system dependencies
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         ffmpeg \
         wget \
         ca-certificates \
+        build-essential \
+        libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
@@ -21,7 +23,7 @@ COPY . .
 # Create necessary directories
 RUN mkdir -p media/audio_files staticfiles
 
-# Expose port for Railway
+# Expose port
 EXPOSE 8080
 
 # Run Django setup and Gunicorn server
